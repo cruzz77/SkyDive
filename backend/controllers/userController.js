@@ -99,11 +99,18 @@ const updateProfile = async (req, res) => {
         const { userId, name, phone, address, dob, gender } = req.body
         const imageFile = req.file
 
-        if (!name || !phone || !dob || !gender) {
+        if (!name && !phone && !dob && !gender && !imageFile) {
             return res.json({ success: false, message: "Data Missing" })
         }
 
-        await userModel.findByIdAndUpdate(userId, { name, phone, address: JSON.parse(address), dob, gender })
+        const updateData = {};
+        if (name) updateData.name = name;
+        if (phone) updateData.phone = phone;
+        if (address) updateData.address = JSON.parse(address);
+        if (dob) updateData.dob = dob;
+        if (gender) updateData.gender = gender;
+
+        await userModel.findByIdAndUpdate(userId, updateData)
 
         if (imageFile) {
 
@@ -179,12 +186,50 @@ const bookings = async (req, res) => {
 
 }
 
+// API to book a package
+const bookPackage = async (req, res) => {
+    try {
+        const { userId, packageId, packageName, price, date, time, location, instructor } = req.body;
+
+        const bookingData = {
+            userId,
+            packageId,
+            packageName,
+            amount: price,
+            date: date, // Can be string now
+            slotDate: date, // Map to slotDate for consistency if needed
+            slotTime: time, // Map to slotTime
+            location,
+            instructorData: { name: instructor }, // Store instructor name in object
+            status: 'confirmed',
+            payment: false,
+            isCompleted: false
+        };
+
+        // If we have a real instructor ID, we could fetch data, but for now let's just save the booking
+        // You might want to update the bookingModel to support these fields if they don't exist
+
+        const newBooking = new bookingModel(bookingData);
+        await newBooking.save();
+
+        res.json({ success: true, message: 'Package Booked Successfully' });
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
 // API to cancel appointment
 const cancelBooking = async (req, res) => {
     try {
 
         const { userId, bookingId } = req.body
         const bookingData = await bookingModel.findById(bookingId)
+
+        if (!bookingData) {
+            return res.json({ success: false, message: 'Booking not found' })
+        }
 
         // verify appointment user 
         if (bookingData.userId !== userId) {
@@ -193,16 +238,21 @@ const cancelBooking = async (req, res) => {
 
         await bookingModel.findByIdAndUpdate(bookingId, { cancelled: true })
 
-        // releasing instructor slot 
-        const { instrId, slotDate, slotTime } = bookingData
+        // releasing instructor slot if applicable
+        const { instructorId, slotDate, slotTime } = bookingData
 
-        const instructorData = await instructorModel.findById(instrId)
+        if (instructorId && slotDate && slotTime) {
+            const instructorData = await instructorModel.findById(instructorId)
 
-        let slots_booked = instructorData.slots_booked
+            if (instructorData) {
+                let slots_booked = instructorData.slots_booked || {}
 
-        slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime)
-
-        await instructorModel.findByIdAndUpdate(instrId, { slots_booked })
+                if (slots_booked[slotDate]) {
+                    slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime)
+                    await instructorModel.findByIdAndUpdate(instructorId, { slots_booked })
+                }
+            }
+        }
 
         res.json({ success: true, message: 'Appointment Cancelled' })
 
@@ -217,9 +267,9 @@ const listAppointment = async (req, res) => {
     try {
 
         const { userId } = req.body
-        const appointments = await bookingModel.find({ userId })
+        const bookings = await bookingModel.find({ userId }).sort({ _id: -1 })
 
-        res.json({ success: true, appointments })
+        res.json({ success: true, bookings, userId })
 
     } catch (error) {
         console.log(error)
@@ -227,12 +277,4 @@ const listAppointment = async (req, res) => {
     }
 }
 
-export {
-    loginUser,
-    registerUser,
-    getProfile,
-    updateProfile,
-    bookings,
-    listAppointment,
-    cancelBooking
-}
+export { registerUser, loginUser, getProfile, updateProfile, bookings, listAppointment, cancelBooking, bookPackage }

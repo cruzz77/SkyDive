@@ -1,4 +1,4 @@
-import { loginAdmin, bookingsAdmin, bookingCancel, addInstructor, allInstructors, adminDashboard} from "../controllers/adminController.js"
+import { loginAdmin, bookingsAdmin, bookingCancel, addInstructor, allInstructors, adminDashboard, addPackage } from "../controllers/adminController.js"
 import { changeAvailablity } from "../controllers/instructorController.js";
 
 import express from 'express';
@@ -13,6 +13,7 @@ adminRouter.get("/bookings", authAdmin, bookingsAdmin)
 adminRouter.post("/cancel-booking", authAdmin, bookingCancel)
 adminRouter.get("/all-instructors", authAdmin, allInstructors)
 adminRouter.post("/change-availability", authAdmin, changeAvailablity)
+adminRouter.post("/add-package", authAdmin, addPackage)
 adminRouter.get("/dashboard", authAdmin, adminDashboard)
 
 export default adminRouter;

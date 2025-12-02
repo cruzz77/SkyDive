@@ -1,0 +1,206 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    @apply bg-slate-900 text-light font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  * {
+    @apply transition-colors duration-200;
+  }
+}
+
+@layer components {
+
+  /* Premium Buttons */
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 relative overflow-hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    @apply absolute inset-0 bg-white opacity-0 hover:opacity-10 transition-opacity duration-300;
+  }
+
+  /* Dark Glassmorphism Cards */
+  .card {
+    @apply bg-slate-800/50 backdrop-blur-xl rounded-2xl shadow-xl border border-white/5 p-6 hover:shadow-2xl hover:border-white/10 transition-all duration-300;
+  }
+
+  .glass-dark {
+    @apply bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl;
+  }
+
+  /* Sidebar Link */
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200 relative;
+  }
+
+  .sidebar-link.active {
+    @apply text-white bg-gradient-to-r from-primary/20 to-secondary/20 border-l-4 border-primary;
+  }
+
+  .sidebar-link.active::before {
+    content: '';
+    @apply absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-secondary rounded-r;
+  }
+
+  /* Premium Inputs */
+  .input-dark {
+    @apply w-full px-4 py-3 bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/10 focus:border-primary focus:bg-slate-800/80 focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 text-white placeholder-gray-500;
+  }
+
+  /* Stat Card */
+  .stat-card {
+    @apply bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl rounded-2xl p-6 border border-white/5 hover:border-white/10 hover:scale-105 transition-all duration-300;
+  }
+
+  /* Table Styles */
+  .table-row {
+    @apply border-b border-white/5 hover:bg-white/5 transition-colors duration-200;
+  }
+
+  /* Badge Styles */
+  .badge-admin {
+    @apply px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 rounded-full text-xs font-semibold backdrop-blur-sm border border-purple-500/30;
+  }
+
+  .badge-instructor {
+    @apply px-3 py-1 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 rounded-full text-xs font-semibold backdrop-blur-sm border border-blue-500/30;
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
+  }
+
+  /* Glow Effect */
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+  }
+}
+
+/* Custom Animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-subtle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(14, 165, 233, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-b from-primary to-secondary rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply from-secondary to-accent;
+}
+
+/* Selection Styling */
+::selection {
+  @apply bg-primary/30 text-white;
+}
+
+/* Loading Spinner */
+.spinner {
+  border: 3px solid rgba(14, 165, 233, 0.1);
+  border-top-color: #0ea5e9;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
