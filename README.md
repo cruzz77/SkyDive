@@ -2,7 +2,7 @@
 
 ## Prerequisites
 - Node.js installed
-- MongoDB running (local or cloud)
+- MongoDB running (cloud)
 - Environment variables configured in `backend/.env`
 
 ## Quick Start
@@ -34,12 +34,12 @@ The admin app will run on `http://localhost:5174`
 ## Default Credentials
 
 ### Admin Login
-- Email: `admin@skydive.com`
-- Password: `admin`
+- Email: `any_email_of_your_choice`
+- Password: `any_pass`
 
 ### Instructor Login
-- Email: `instructor@skydive.com`
-- Password: `instructor`
+- Email: `any_email_of_your_choice`
+- Password: `any_pass`
 
 ### User Registration
 Create a new account via the Signup page on the user app.
