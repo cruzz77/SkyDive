@@ -1,4 +1,9 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://skydive-backend-qzsl.onrender.com/api';
+let API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://skydive-backend-qzsl.onrender.com/api';
+
+// Ensure API_BASE_URL ends with /api
+if (!API_BASE_URL.endsWith('/api')) {
+    API_BASE_URL += '/api';
+}
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');
