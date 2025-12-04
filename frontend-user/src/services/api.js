@@ -1,4 +1,7 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL =
+  import.meta.env.PROD
+    ? "https://skydive-backend-qzsl.onrender.com"
+    : "/api";
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');
