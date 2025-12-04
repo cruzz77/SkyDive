@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');
@@ -19,7 +19,10 @@ export const api = {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 headers: getHeaders(),
             });
-            if (!response.ok) throw new Error('API Error');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `API Error: ${response.status} ${response.statusText}`);
+            }
             return await response.json();
         } catch (error) {
             console.error('API GET Error:', error);
@@ -34,7 +37,10 @@ export const api = {
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
-            if (!response.ok) throw new Error('API Error');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `API Error: ${response.status} ${response.statusText}`);
+            }
             return await response.json();
         } catch (error) {
             console.error('API POST Error:', error);
