@@ -37,13 +37,16 @@ export const api = {
 
     post: async (endpoint, data) => {
         try {
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            const fullUrl = `${API_BASE_URL}${endpoint}`;
+            console.log('API Request:', fullUrl, data); // Debug logging
+            const response = await fetch(fullUrl, {
                 method: 'POST',
                 headers: getHeaders(),
                 body: JSON.stringify(data),
             });
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
+                console.error('API Error Response:', response.status, errorData);
                 throw new Error(errorData.message || `API Error: ${response.status} ${response.statusText}`);
             }
             return await response.json();
